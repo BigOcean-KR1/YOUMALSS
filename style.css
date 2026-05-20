@@ -411,3 +411,9 @@ body {
   display:flex; align-items:center;
 }
 .ep-item strong { color:var(--green); }
+
+/* ── FLOW + GRID 초기 숨김 (JS로 순차 등장) ── */
+#s6 .flow-step,
+#s6 .flow-arr,
+#s6 .flow-note { opacity: 0; }
+#s7 .sg-card   { opacity: 0; transform: translateY(24px) scale(.95); }
