@@ -37,7 +37,17 @@
     cur=n;
     updateNav();
     if(n===5) setTimeout(runStatAnim, 350);
-    if(n===6) setTimeout(runFlowAnim, 200);
+    if(n===6){
+      s6Step=0; s6Active=true;
+      setTimeout(()=>{
+        // 클릭 이벤트
+        document.querySelectorAll('.s6-step-item').forEach((el,i)=>{
+          el.onclick=()=>s6GoTo(i);
+        });
+        s6GoTo(0);
+      }, 300);
+    }
+    if(n!==6) s6Active=false;
     if(n===7) setTimeout(runGridAnim, 200);
     if(n===8) setTimeout(runDataAnim, 350);
   }
@@ -55,6 +65,10 @@
   }
   document.getElementById('s1').classList.add('active');
   document.addEventListener('keydown',e=>{
+    if(cur===6){
+      if(e.key==='ArrowRight'||e.key==='ArrowDown'){ e.preventDefault(); s6Next(); return; }
+      if(e.key==='ArrowLeft' ||e.key==='ArrowUp')  { e.preventDefault(); s6Prev(); return; }
+    }
     if(e.key==='ArrowRight'||e.key==='ArrowDown') next();
     if(e.key==='ArrowLeft' ||e.key==='ArrowUp')   prev();
   });
@@ -81,6 +95,94 @@
       else{ numEl.textContent='62.5'; fillEl.style.width='62.5%'; }
     }
     requestAnimationFrame(tick);
+  }
+
+  /* ── 슬라이드 6: 사진 줌인 + 단계 클릭/키보드 ── */
+  const ZOOM = [
+    { ox:'92%', oy:'60%', scale:2.2 },
+    { ox:'78%', oy:'55%', scale:2.4 },
+    { ox:'52%', oy:'8%',  scale:2.8 },
+    { ox:'20%', oy:'78%', scale:2.2 },
+    { ox:'68%', oy:'80%', scale:2.6 },
+  ];
+  let s6Step = 0;
+  let s6Active = false;
+
+  function s6GoTo(n){
+    if(n < 0) n = 0;
+    if(n > 4) n = 4;
+    s6Step = n;
+    const items = document.querySelectorAll('.s6-step-item');
+    const img   = document.getElementById('s6-img');
+    if(!items.length || !img) return;
+    items.forEach((el,i) => el.classList.toggle('active', i===n));
+    const z = ZOOM[n];
+    img.style.transformOrigin = z.ox + ' ' + z.oy;
+    img.style.transform = `scale(${z.scale})`;
+  }
+
+  function s6Next(){ if(s6Step < 4) s6GoTo(s6Step+1); else goTo(7, 1); }
+  function s6Prev(){ if(s6Step > 0) s6GoTo(s6Step-1); else goTo(5,-1); }
+
+  /* ── 슬라이드 6: 플로우 순차 등장 ── */
+  // 각 단계별 사진 줌 위치 (originX%, originY%, scale)
+  const ZOOM_STEPS = [
+    { ox: '92%', oy: '60%', scale: 2.2 },  // ① 쓰레기 투입 - 오른쪽 프레임
+    { ox: '78%', oy: '55%', scale: 2.4 },  // ② 적층 방지 - 파란 커튼
+    { ox: '52%', oy: '8%',  scale: 2.6 },  // ③ 카메라 인식 - 상단 카메라
+    { ox: '20%', oy: '78%', scale: 2.2 },  // ④ 자동 분류 - 2번 컨베이어
+    { ox: '68%', oy: '80%', scale: 2.8 },  // ⑤ 재순환 - 검은 박스
+  ];
+
+  function runFlowHighlight(){
+    const steps = document.querySelectorAll('#s6 .flow-step');
+    const img   = document.querySelector('.system-img-top');
+    if(!steps.length || !img) return;
+    let i = 0;
+    function highlightNext(){
+      // 카드 하이라이트
+      steps.forEach(s => s.classList.remove('highlight'));
+      if(i < steps.length){
+        steps[i].classList.add('highlight');
+        // 사진 줌인
+        const z = ZOOM_STEPS[i];
+        img.style.transition = 'transform .6s ease';
+        img.style.transformOrigin = z.ox + ' ' + z.oy;
+        img.style.transform = `scale(${z.scale})`;
+        i++;
+        setTimeout(highlightNext, 1600);
+      } else {
+        // 초기화 후 반복
+        img.style.transform = 'scale(1)';
+        img.style.transformOrigin = 'center center';
+        steps.forEach(s => s.classList.remove('highlight'));
+        i = 0;
+        setTimeout(highlightNext, 1000);
+      }
+    }
+    highlightNext();
+  }
+
+  /* ── 슬라이드 6: 플로우 순차 등장 ── */
+  function runFlowHighlight(){
+    const steps = document.querySelectorAll('#s6 .flow-step');
+    if(!steps.length) return;
+    let i = 0;
+    function highlightNext(){
+      steps.forEach(s => s.classList.remove('highlight'));
+      if(i < steps.length){
+        steps[i].classList.add('highlight');
+        // 스크롤 없이 해당 카드로 부드럽게 포커스
+        steps[i].scrollIntoView({behavior:'smooth', block:'nearest', inline:'center'});
+        i++;
+        setTimeout(highlightNext, 1200);
+      } else {
+        // 전체 순환 후 다시 반복
+        i = 0;
+        setTimeout(highlightNext, 800);
+      }
+    }
+    highlightNext();
   }
 
   /* ── 슬라이드 6: 플로우 순차 등장 ── */
