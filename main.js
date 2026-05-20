@@ -146,9 +146,9 @@
   const CFG={
     MODEL_URL:'https://teachablemachine.withgoogle.com/models/ChPvPgdOk/',
     CLASSES:[
-      {name:'플라스틱',emoji:'🧴'},{name:'캔',emoji:'🥫'},
-      {name:'종이',emoji:'📄'},{name:'유리',emoji:'🍶'},
-      {name:'스티로폼',emoji:'📦'},{name:'비닐',emoji:'🛍️'},
+      {name:'Cardboard',emoji:'📦'},{name:'Glass',emoji:'🍶'},
+      {name:'Metal',emoji:'🥫'},{name:'Paper',emoji:'📄'},
+      {name:'Plastic',emoji:'🧴'},{name:'Trash',emoji:'🗑️'},
     ],
     MS:500,
   };
@@ -167,12 +167,37 @@
   }
   initBars();
 
+  let frozen = false;
+
+  async function captureFrame(){
+    const btn = document.getElementById('btn-capture');
+    if(!frozen){
+      // 일시정지 + 즉시 예측
+      frozen = true;
+      clearInterval(intv);
+      await predict();
+      btn.textContent = '▶ 재개';
+      btn.classList.add('frozen');
+      // 캠 화면에 캡처 표시
+      const scan = document.getElementById('cf-scan');
+      scan.classList.remove('on');
+    } else {
+      // 재개
+      frozen = false;
+      intv = setInterval(predict, CFG.MS);
+      btn.textContent = '📸 캡처 분류';
+      btn.classList.remove('frozen');
+      document.getElementById('cf-scan').classList.add('on');
+    }
+  }
+
   async function startCamera(){
     try{
       stream=await navigator.mediaDevices.getUserMedia({video:{facingMode:'environment'}});
       const v=$('webcam'); v.srcObject=stream; v.style.display='block';
       $('cam-idle').style.display='none';
       $('btn-start').style.display='none';
+      $('btn-capture').style.display='flex';
       $('btn-stop').style.display='flex';
       $('cf-scan').classList.add('on');
       $('dr-status').textContent='● LIVE'; $('dr-status').classList.add('on');
@@ -188,10 +213,11 @@
     const v=$('webcam'); v.style.display='none'; v.srcObject=null;
     $('cam-idle').style.display='flex';
     $('btn-start').style.display='flex';
+    $('btn-capture').style.display='none';
     $('btn-stop').style.display='none';
     $('cf-scan').classList.remove('on');
     $('dr-status').textContent='READY'; $('dr-status').classList.remove('on');
-    running=false; reset();
+    running=false; frozen=false; reset();
   }
 
   async function loadModel(){
@@ -236,5 +262,5 @@
     });
   }
   function setStatus(t,msg){ $('dm-text').textContent=msg; $('dm-dot').className='dm-dot'+(t==='ok'?' ok':''); }
-  window.startCamera=startCamera; window.stopCamera=stopCamera;
+  window.startCamera=startCamera; window.stopCamera=stopCamera; window.captureFrame=captureFrame;
 })();
