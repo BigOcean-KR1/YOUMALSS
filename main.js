@@ -412,7 +412,7 @@
 
   let tick=0;
   async function predict(){
-    if(!running)return;
+    if(!running||frozen)return;
     let ps;
     if(model){
       const r=await model.predict($('webcam'));
