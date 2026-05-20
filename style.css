@@ -540,3 +540,28 @@ body {
 #s9 .ef-em    { font-size: 2.4rem; }
 #s9 .ef-name  { font-size: 1.1rem; }
 #s9 .ef-body  { font-size: .9rem; }
+
+/* ── SLIDE 6 FLOW FIX ── */
+#s6 .s6-layout { grid-template-columns: 1fr 1.6fr; gap: 2rem; }
+#s6 .flow { gap: 0; justify-content: space-between; }
+#s6 .flow-step {
+  flex: 0 0 auto;
+  width: 110px;
+  min-width: 110px;
+  padding: 1.4rem .6rem;
+  text-align: center;
+}
+#s6 .fs-label {
+  font-size: .88rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+#s6 .fs-desc {
+  font-size: .72rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+#s6 .flow-arr { font-size: 1.3rem; padding: 0 .2rem; flex-shrink: 0; }
+.system-img { max-height: 360px; }
