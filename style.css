@@ -498,3 +498,21 @@ body {
 #s6 .fs-desc  { font-size: .68rem; }
 #s6 .fs-num   { width:30px; height:30px; font-size:.8rem; }
 #s6 .sh       { margin-bottom: .75rem; }
+
+/* ── SLIDE 6 LAYOUT ── */
+.s6-layout {
+  display: grid;
+  grid-template-columns: 1fr 1.4fr;
+  gap: 1.5rem;
+  align-items: center;
+}
+.system-img {
+  width: 100%;
+  height: auto;
+  max-height: 280px;
+  object-fit: contain;
+  border-radius: var(--r-lg);
+  box-shadow: 0 8px 32px rgba(0,0,0,.45);
+}
+.s6-right { display: flex; flex-direction: column; gap: .8rem; }
+#s6 .flow { margin-bottom: 0; }
