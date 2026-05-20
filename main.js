@@ -115,30 +115,46 @@
   function s6GoTo(n){
     s6Step = n;
     const items = document.querySelectorAll('.s6-step-item');
-    const img   = document.getElementById('s6-img');
+    const wrap  = document.querySelector('.s6-img-wrap');
     const title = document.getElementById('s6-subtitle');
-    if(!img) return;
+    if(!wrap) return;
+
     items.forEach((el,i) => el.classList.toggle('active', i===n));
-    const z = n === -1 ? ZOOM[0] : ZOOM[n+1];
 
-    // 1단계: 현재 위치에서 scale(1)로 줄이기
-    img.style.transition = 'transform .35s cubic-bezier(.4,0,.2,1)';
-    img.style.transform = 'scale(1)';
+    // 페이드 아웃
+    wrap.style.transition = 'opacity .3s ease';
+    wrap.style.opacity = '0';
 
-    // 2단계: origin 바꾸고 목표 scale로 확대
     setTimeout(()=>{
-      img.style.transformOrigin = z.ox + ' ' + z.oy;
-      img.style.transition = 'transform .55s cubic-bezier(.22,1,.36,1)';
-      img.style.transform = `scale(${z.scale})`;
-    }, 360);
+      // 이미지 src 교체 없이 clip-path로 영역 표시
+      const img = document.getElementById('s6-img');
+      img.style.transition = 'none';
+      img.style.transform = 'none';
+      img.style.transformOrigin = 'center center';
 
-    if(title){
-      title.style.opacity = '0';
-      setTimeout(()=>{
+      // 각 단계별 crop 영역 (object-position으로 포커스)
+      const POS = [
+        'center center',   // 전체
+        '95% 65%',         // ① 오른쪽 프레임
+        '80% 55%',         // ② 파란 커튼
+        '52% 5%',          // ③ 카메라
+        '15% 80%',         // ④ 컨베이어
+        '70% 80%',         // ⑤ 검은 박스
+      ];
+      const SCALE = [1, 2.2, 2.4, 2.8, 2.2, 2.6];
+      const idx = n === -1 ? 0 : n+1;
+
+      img.style.transformOrigin = POS[idx];
+      img.style.transform = `scale(${SCALE[idx]})`;
+
+      // 페이드 인
+      wrap.style.transition = 'opacity .4s ease';
+      wrap.style.opacity = '1';
+
+      if(title){
         title.textContent = n === -1 ? S6_LABELS[0] : S6_LABELS[n+1];
-        title.style.opacity = '1';
-      }, 200);
-    }
+      }
+    }, 320);
   }
 
   function s6Next(){
