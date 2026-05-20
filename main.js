@@ -37,6 +37,7 @@
     if(n===5) setTimeout(runStatAnim, 350);
     if(n===6) setTimeout(runFlowAnim, 200);
     if(n===7) setTimeout(runGridAnim, 200);
+    if(n===8) setTimeout(runDataAnim, 350);
     if(n===6) setTimeout(runFlowAnim, 200);
   }
 
@@ -154,6 +155,28 @@
         el.style.opacity='1'; el.style.transform='translateY(0) scale(1)';
       }, i*100);
     });
+  }
+
+/* ===== DATA ANIM ===== */
+  function runDataAnim(){
+    const el40 = document.getElementById('num-40');
+    const el23 = document.getElementById('num-23');
+    if(!el40 || !el23) return;
+
+    function countUp(el, target, duration){
+      const start = performance.now();
+      function tick(now){
+        const p    = Math.min((now-start)/duration, 1);
+        const ease = 1 - Math.pow(1-p, 3);
+        el.textContent = Math.floor(target * ease);
+        if(p < 1) requestAnimationFrame(tick);
+        else el.textContent = target;
+      }
+      requestAnimationFrame(tick);
+    }
+
+    countUp(el40, 40, 1600);
+    setTimeout(()=> countUp(el23, 23, 1600), 150);
   }
 
 /* ===== CLASSIFIER ===== */
