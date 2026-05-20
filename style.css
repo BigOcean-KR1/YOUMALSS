@@ -418,56 +418,44 @@ body {
 #s6 .flow-note { opacity: 0; }
 #s7 .sg-card   { opacity: 0; transform: translateY(24px) scale(.95); }
 
-/* ── SG CARD GLOW ── */
+
+
+/* ── SG CARD BACKGROUND GLOW ── */
 #s7 .sg-card {
   position: relative;
-  transition: opacity .4s ease, transform .4s ease, box-shadow .4s ease;
+  z-index: 0;
+  transition: opacity .4s ease, transform .4s ease;
 }
-#s7 .sg-card::before {
+#s7 .sg-card::after {
   content: '';
   position: absolute;
-  inset: -2px;
+  inset: 0;
   border-radius: inherit;
-  opacity: 0;
-  filter: blur(14px);
-  transition: opacity .6s ease;
   z-index: -1;
+  opacity: 0;
+  filter: blur(22px);
+  transform: translateY(8px) scale(0.85);
+  transition: opacity .5s ease;
 }
-#s7 .sg1::before { background: rgba(52,211,153,.5); }
-#s7 .sg2::before { background: rgba(251,191,36,.5); }
-#s7 .sg3::before { background: rgba(96,165,250,.5); }
-#s7 .sg4::before { background: rgba(34,211,238,.5); }
-#s7 .sg5::before { background: rgba(167,139,250,.5); }
-#s7 .sg6::before { background: rgba(251,113,133,.5); }
+#s7 .sg1::after { background: rgba(52,211,153,.55); }
+#s7 .sg2::after { background: rgba(251,191,36,.55); }
+#s7 .sg3::after { background: rgba(96,165,250,.55); }
+#s7 .sg4::after { background: rgba(34,211,238,.55); }
+#s7 .sg5::after { background: rgba(167,139,250,.55); }
+#s7 .sg6::after { background: rgba(251,113,133,.55); }
 
-#s7 .sg-card.glow::before { opacity: 1; }
-#s7 .sg-card.glow {
-  box-shadow: 0 0 28px rgba(255,255,255,.08);
-}
+#s7 .sg-card.glow::after { opacity: 1; }
 
-/* ── SG CARD PULSE GLOW (등장 후 순차 두근두근) ── */
-@keyframes sg-pulse {
-  0%,100% { box-shadow: 0 0 10px rgba(255,255,255,.04); }
-  50%      { box-shadow: 0 0 32px rgba(255,255,255,.15); }
-}
-#s7 .sg-card.glow { animation: sg-pulse 2.2s ease-in-out infinite; }
-#s7 .sg1.glow { animation: sg-pulse-1 2.2s ease-in-out infinite; }
-#s7 .sg2.glow { animation: sg-pulse-2 2.2s ease-in-out infinite; }
-#s7 .sg3.glow { animation: sg-pulse-3 2.2s ease-in-out infinite; }
-#s7 .sg4.glow { animation: sg-pulse-4 2.2s ease-in-out infinite; }
-#s7 .sg5.glow { animation: sg-pulse-5 2.2s ease-in-out infinite; }
-#s7 .sg6.glow { animation: sg-pulse-6 2.2s ease-in-out infinite; }
+@keyframes bg-pulse-1 { 0%,100%{opacity:.25;transform:translateY(8px) scale(.85)} 50%{opacity:.7;transform:translateY(6px) scale(.9)} }
+@keyframes bg-pulse-2 { 0%,100%{opacity:.25;transform:translateY(8px) scale(.85)} 50%{opacity:.7;transform:translateY(6px) scale(.9)} }
+@keyframes bg-pulse-3 { 0%,100%{opacity:.25;transform:translateY(8px) scale(.85)} 50%{opacity:.7;transform:translateY(6px) scale(.9)} }
+@keyframes bg-pulse-4 { 0%,100%{opacity:.25;transform:translateY(8px) scale(.85)} 50%{opacity:.7;transform:translateY(6px) scale(.9)} }
+@keyframes bg-pulse-5 { 0%,100%{opacity:.25;transform:translateY(8px) scale(.85)} 50%{opacity:.7;transform:translateY(6px) scale(.9)} }
+@keyframes bg-pulse-6 { 0%,100%{opacity:.25;transform:translateY(8px) scale(.85)} 50%{opacity:.7;transform:translateY(6px) scale(.9)} }
 
-@keyframes sg-pulse-1 { 0%,100%{box-shadow:0 0 8px rgba(52,211,153,.15)} 50%{box-shadow:0 0 36px rgba(52,211,153,.55),0 0 60px rgba(52,211,153,.2)} }
-@keyframes sg-pulse-2 { 0%,100%{box-shadow:0 0 8px rgba(251,191,36,.15)} 50%{box-shadow:0 0 36px rgba(251,191,36,.55),0 0 60px rgba(251,191,36,.2)} }
-@keyframes sg-pulse-3 { 0%,100%{box-shadow:0 0 8px rgba(96,165,250,.15)} 50%{box-shadow:0 0 36px rgba(96,165,250,.55),0 0 60px rgba(96,165,250,.2)} }
-@keyframes sg-pulse-4 { 0%,100%{box-shadow:0 0 8px rgba(34,211,238,.15)} 50%{box-shadow:0 0 36px rgba(34,211,238,.55),0 0 60px rgba(34,211,238,.2)} }
-@keyframes sg-pulse-5 { 0%,100%{box-shadow:0 0 8px rgba(167,139,250,.15)} 50%{box-shadow:0 0 36px rgba(167,139,250,.55),0 0 60px rgba(167,139,250,.2)} }
-@keyframes sg-pulse-6 { 0%,100%{box-shadow:0 0 8px rgba(251,113,133,.15)} 50%{box-shadow:0 0 36px rgba(251,113,133,.55),0 0 60px rgba(251,113,133,.2)} }
-
-#s7 .sg1.glow { animation-delay: 0s; }
-#s7 .sg2.glow { animation-delay: 0.37s; }
-#s7 .sg3.glow { animation-delay: 0.74s; }
-#s7 .sg4.glow { animation-delay: 1.11s; }
-#s7 .sg5.glow { animation-delay: 1.48s; }
-#s7 .sg6.glow { animation-delay: 1.85s; }
+#s7 .sg1.glow::after { animation: bg-pulse-1 2.4s ease-in-out infinite; animation-delay: 0s; }
+#s7 .sg2.glow::after { animation: bg-pulse-2 2.4s ease-in-out infinite; animation-delay: 0.4s; }
+#s7 .sg3.glow::after { animation: bg-pulse-3 2.4s ease-in-out infinite; animation-delay: 0.8s; }
+#s7 .sg4.glow::after { animation: bg-pulse-4 2.4s ease-in-out infinite; animation-delay: 1.2s; }
+#s7 .sg5.glow::after { animation: bg-pulse-5 2.4s ease-in-out infinite; animation-delay: 1.6s; }
+#s7 .sg6.glow::after { animation: bg-pulse-6 2.4s ease-in-out infinite; animation-delay: 2.0s; }
