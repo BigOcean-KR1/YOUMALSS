@@ -114,13 +114,14 @@
 
   // 각 단계별 translate(x,y) + scale
   // 컨테이너 기준으로 이미지를 이동시켜서 pan+zoom 효과
+  // translate 방식 - 하나의 사진에서 카메라 이동처럼 부드럽게
   const CAM = [
-    { ox: '50%', oy: '50%', s: 1   },  // 전체샷
-    { ox: '92%', oy: '60%', s: 2.2 },  // ① 쓰레기 투입
-    { ox: '78%', oy: '55%', s: 2.4 },  // ② 적층 방지
-    { ox: '52%', oy:  '8%', s: 2.6 },  // ③ 카메라 인식
-    { ox: '20%', oy: '78%', s: 2.2 },  // ④ 자동 분류
-    { ox: '68%', oy: '80%', s: 2.8 },  // ⑤ 재순환
+    { tx:   0.0, ty:   0.0, s: 1.0 },  // 전체샷
+    { tx: -22.9, ty:  -5.5, s: 2.2 },  // ① 쓰레기 투입
+    { tx: -16.3, ty:  -2.9, s: 2.4 },  // ② 적층 방지
+    { tx:  -1.2, ty:  25.8, s: 2.6 },  // ③ 카메라 인식
+    { tx:  16.4, ty: -15.3, s: 2.2 },  // ④ 자동 분류
+    { tx: -11.6, ty: -19.3, s: 2.8 },  // ⑤ 재순환
   ];
 
   function s6GoTo(n){
@@ -135,9 +136,10 @@
     const idx = n === -1 ? 0 : n+1;
     const c = CAM[idx];
 
-    img.style.transition = 'transform-origin 0s, transform .9s cubic-bezier(.25,.46,.45,.94)';
-    img.style.transformOrigin = c.ox + ' ' + c.oy;
-    img.style.transform = `scale(${c.s})`;
+    // transform-origin 고정, translate+scale만 변경 → 완전히 부드러운 이동
+    img.style.transformOrigin = 'center center';
+    img.style.transition = 'transform .9s cubic-bezier(.25,.46,.45,.94)';
+    img.style.transform = `scale(${c.s}) translate(${c.tx}%, ${c.ty}%)`;
 
     if(title){
       title.style.opacity = '0';
