@@ -112,49 +112,41 @@
   let s6Phase = 0;
   let s6Active = false;
 
+  // 각 단계별 translate(x,y) + scale
+  // 컨테이너 기준으로 이미지를 이동시켜서 pan+zoom 효과
+  const CAM = [
+    { tx:  0,   ty:  0,   s: 1   },  // 전체샷
+    { tx:  18,  ty:  8,   s: 2.2 },  // ① 오른쪽 프레임 (쓰레기 투입)
+    { tx:  10,  ty:  4,   s: 2.4 },  // ② 파란 커튼 (적층 방지)
+    { tx:  0,   ty: -38,  s: 2.8 },  // ③ 상단 카메라
+    { tx: -22,  ty:  18,  s: 2.2 },  // ④ 하단 컨베이어
+    { tx:  8,   ty:  20,  s: 2.6 },  // ⑤ 검은 박스
+  ];
+
   function s6GoTo(n){
     s6Step = n;
     const items = document.querySelectorAll('.s6-step-item');
-    const wrap  = document.querySelector('.s6-img-wrap');
+    const img   = document.getElementById('s6-img');
     const title = document.getElementById('s6-subtitle');
-    if(!wrap) return;
+    if(!img) return;
 
     items.forEach((el,i) => el.classList.toggle('active', i===n));
 
-    // 페이드 아웃
-    wrap.style.transition = 'opacity .3s ease';
-    wrap.style.opacity = '0';
+    const idx = n === -1 ? 0 : n+1;
+    const c = CAM[idx];
 
-    setTimeout(()=>{
-      // 이미지 src 교체 없이 clip-path로 영역 표시
-      const img = document.getElementById('s6-img');
-      img.style.transition = 'none';
-      img.style.transform = 'none';
-      img.style.transformOrigin = 'center center';
+    // 하나의 transform으로 pan+zoom 동시에 부드럽게
+    img.style.transition = 'transform .9s cubic-bezier(.25,.46,.45,.94)';
+    img.style.transformOrigin = 'center center';
+    img.style.transform = `scale(${c.s}) translate(${c.tx}%, ${c.ty}%)`;
 
-      // 각 단계별 crop 영역 (object-position으로 포커스)
-      const POS = [
-        'center center',   // 전체
-        '95% 65%',         // ① 오른쪽 프레임
-        '80% 55%',         // ② 파란 커튼
-        '52% 5%',          // ③ 카메라
-        '15% 80%',         // ④ 컨베이어
-        '70% 80%',         // ⑤ 검은 박스
-      ];
-      const SCALE = [1, 2.2, 2.4, 2.8, 2.2, 2.6];
-      const idx = n === -1 ? 0 : n+1;
-
-      img.style.transformOrigin = POS[idx];
-      img.style.transform = `scale(${SCALE[idx]})`;
-
-      // 페이드 인
-      wrap.style.transition = 'opacity .4s ease';
-      wrap.style.opacity = '1';
-
-      if(title){
+    if(title){
+      title.style.opacity = '0';
+      setTimeout(()=>{
         title.textContent = n === -1 ? S6_LABELS[0] : S6_LABELS[n+1];
-      }
-    }, 320);
+        title.style.opacity = '1';
+      }, 200);
+    }
   }
 
   function s6Next(){
