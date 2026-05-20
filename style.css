@@ -479,3 +479,22 @@ body {
 #s11 .sh-title { font-size: clamp(1.4rem, 2.5vw, 2rem); }
 #s11 .sh-desc  { font-size: .85rem; margin-top: .25rem; }
 #s11 .slide-inner { padding-top: .5rem; }
+
+/* ── SYSTEM IMAGE ── */
+.system-img-wrap {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 1.2rem;
+}
+.system-img {
+  height: 200px;
+  width: auto;
+  border-radius: var(--r-lg);
+  object-fit: contain;
+  box-shadow: 0 8px 32px rgba(0,0,0,.4);
+}
+/* 사진 있으면 플로우 텍스트 작게 */
+#s6 .fs-label { font-size: .78rem; }
+#s6 .fs-desc  { font-size: .68rem; }
+#s6 .fs-num   { width:30px; height:30px; font-size:.8rem; }
+#s6 .sh       { margin-bottom: .75rem; }
