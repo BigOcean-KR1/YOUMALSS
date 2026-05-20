@@ -38,12 +38,12 @@
     updateNav();
     if(n===5) setTimeout(runStatAnim, 350);
     if(n===6){
-      s6Step=-1; s6Active=true;
+      s6Step=-1; s6Active=true; s6SeenOverview=false;
       setTimeout(()=>{
         document.querySelectorAll('.s6-step-item').forEach((el,i)=>{
           el.onclick=()=>s6GoTo(i);
         });
-        s6GoTo(-1); // 전체샷부터 시작
+        s6GoTo(-1);
       }, 300);
     }
     if(n!==6) s6Active=false;
