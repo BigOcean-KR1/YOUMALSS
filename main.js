@@ -34,6 +34,26 @@
     next.classList.add('active');
     cur=n;
     updateNav();
+    if(n===5) setTimeout(runStatAnim, 350);
+  }
+
+  function runStatAnim(){
+    const numEl  = document.getElementById('stat-num');
+    const fillEl = document.getElementById('stat-bar');
+    if(!numEl || !fillEl) return;
+    const target=62.5, duration=1800, start=performance.now();
+    fillEl.style.transition='none';
+    fillEl.style.width='0%';
+    function tick(now){
+      const p=Math.min((now-start)/duration,1);
+      const ease=1-Math.pow(1-p,3);
+      const val=(target*ease);
+      numEl.textContent=val.toFixed(1);
+      fillEl.style.width=val+'%';
+      if(p<1) requestAnimationFrame(tick);
+      else{ numEl.textContent='62.5'; fillEl.style.width='62.5%'; }
+    }
+    requestAnimationFrame(tick);
   }
   function next(){ goTo(cur+1,1); }
   function prev(){ goTo(cur-1,-1); }
@@ -48,6 +68,8 @@
     dotsEl.appendChild(d);
   }
   document.getElementById('s1').classList.add('active');
+  // 직접 5번으로 이동했을 때도 실행
+  if(cur===5) setTimeout(runStatAnim, 350);
   document.addEventListener('keydown',e=>{
     if(e.key==='ArrowRight'||e.key==='ArrowDown') next();
     if(e.key==='ArrowLeft' ||e.key==='ArrowUp')   prev();
