@@ -40,13 +40,13 @@ body {
   position: absolute; inset: 0;
   display: flex; align-items: center; justify-content: center;
   opacity: 0; pointer-events: none;
-  transform: translateX(80px) scale(0.97);
-  transition: opacity .5s cubic-bezier(.4,0,.2,1), transform .5s cubic-bezier(.4,0,.2,1);
-  background: var(--bg);   /* ← 모든 슬라이드 같은 배경 */
+  transform: translateY(30px);
+  transition: opacity .65s cubic-bezier(.22,1,.36,1), transform .65s cubic-bezier(.22,1,.36,1);
+  background: var(--bg);
 }
-.slide.active  { opacity:1; pointer-events:all; transform:translateX(0) scale(1); }
-.slide.exit-l  { opacity:0; transform:translateX(-80px) scale(0.97); }
-.slide.exit-r  { opacity:0; transform:translateX(80px)  scale(0.97); }
+.slide.active  { opacity:1; pointer-events:all; transform:translateY(0); }
+.slide.exit-l  { opacity:0; transform:translateY(-30px); }
+.slide.exit-r  { opacity:0; transform:translateY(30px); }
 
 /* slide-inner */
 .slide-inner {
@@ -702,3 +702,8 @@ body {
   scrollbar-width: none;
 }
 #s6 .s6-steps::-webkit-scrollbar { display: none; }
+
+/* ── S6 SUBTITLE FADE ── */
+#s6-subtitle {
+  transition: opacity .2s ease;
+}
