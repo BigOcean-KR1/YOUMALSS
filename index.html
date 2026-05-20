@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AI 쓰레기 자동 분류기</title>
+  <link rel="stylesheet" href="css/style.css" />
+  <link rel="stylesheet" href="css/animations.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700;900&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+</head>
+<body>
+
+  <!-- 배경 파티클 캔버스 -->
+  <canvas id="bg-canvas"></canvas>
+
+  <!-- 헤더 -->
+  <header class="site-header" id="site-header">
+    <div class="header-inner">
+      <div class="logo">
+        <span class="logo-icon">♻</span>
+        <span class="logo-text">TrashAI</span>
+      </div>
+      <nav class="nav-links">
+        <a href="#hero">홈</a>
+        <a href="#classifier">분류기</a>
+        <a href="#about">소개</a>
+      </nav>
+    </div>
+  </header>
+
+  <!-- 히어로 섹션 -->
+  <section class="hero" id="hero">
+    <div class="hero-content">
+      <div class="hero-badge reveal">딥러닝 기반 자동화 시스템</div>
+      <h1 class="hero-title reveal">
+        쓰레기를<br/>
+        <span class="highlight">AI가 분류</span>합니다
+      </h1>
+      <p class="hero-sub reveal">
+        카메라에 갖다 대기만 하면<br/>
+        플라스틱, 캔, 종이, 유리, 스티로폼, 비닐을 자동으로 인식합니다
+      </p>
+      <a href="#classifier" class="cta-btn reveal">
+        <span>지금 바로 분류하기</span>
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+      </a>
+    </div>
+    <div class="hero-visual reveal">
+      <div class="orbit-container">
+        <div class="orbit-center">🤖</div>
+        <div class="orbit orbit-1">
+          <div class="orbit-item" style="--i:0">🧴</div>
+          <div class="orbit-item" style="--i:1">🥫</div>
+          <div class="orbit-item" style="--i:2">📄</div>
+          <div class="orbit-item" style="--i:3">🍶</div>
+          <div class="orbit-item" style="--i:4">📦</div>
+          <div class="orbit-item" style="--i:5">🛍️</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 분류기 섹션 -->
+  <section class="classifier-section" id="classifier">
+    <div class="section-header reveal">
+      <span class="section-tag">LIVE DEMO</span>
+      <h2>실시간 쓰레기 분류기</h2>
+      <p>카메라에 쓰레기를 보여주세요</p>
+    </div>
+
+    <div class="classifier-wrapper">
+      <!-- 카메라 패널 -->
+      <div class="cam-panel reveal">
+        <div class="cam-frame">
+          <div class="cam-corner tl"></div>
+          <div class="cam-corner tr"></div>
+          <div class="cam-corner bl"></div>
+          <div class="cam-corner br"></div>
+          <div class="cam-scan-line" id="scan-line"></div>
+          <video id="webcam" autoplay playsinline></video>
+          <div class="cam-overlay" id="cam-overlay">
+            <div class="cam-placeholder">
+              <div class="cam-icon">📷</div>
+              <p>카메라 시작 버튼을 눌러주세요</p>
+            </div>
+          </div>
+        </div>
+        <div class="cam-controls">
+          <button class="btn-start" id="btn-start" onclick="startCamera()">
+            <span class="btn-dot"></span> 카메라 시작
+          </button>
+          <button class="btn-stop" id="btn-stop" onclick="stopCamera()" style="display:none">
+            ⏹ 정지
+          </button>
+        </div>
+      </div>
+
+      <!-- 결과 패널 -->
+      <div class="result-panel reveal">
+        <div class="result-header">
+          <span class="live-badge" id="live-badge">● READY</span>
+          <span class="result-title">분류 결과</span>
+        </div>
+
+        <div class="result-main" id="result-main">
+          <div class="result-emoji" id="result-emoji">❓</div>
+          <div class="result-label" id="result-label">대기 중</div>
+          <div class="result-confidence" id="result-confidence">카메라를 시작하면 분류가 시작됩니다</div>
+        </div>
+
+        <div class="result-bars" id="result-bars">
+          <!-- JS로 동적 생성 -->
+        </div>
+
+        <div class="model-status">
+          <div class="status-dot" id="status-dot"></div>
+          <span id="status-text">티처블 머신 모델 연동 대기 중</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 분류 항목 섹션 -->
+  <section class="categories-section" id="categories">
+    <div class="section-header reveal">
+      <span class="section-tag">CATEGORIES</span>
+      <h2>6가지 분류 항목</h2>
+      <p>AI가 구별할 수 있는 쓰레기 종류</p>
+    </div>
+    <div class="categories-grid">
+      <div class="cat-card reveal" style="--delay: 0s">
+        <div class="cat-emoji">🧴</div>
+        <div class="cat-name">플라스틱</div>
+        <div class="cat-desc">페트병, 플라스틱 용기류</div>
+      </div>
+      <div class="cat-card reveal" style="--delay: 0.08s">
+        <div class="cat-emoji">🥫</div>
+        <div class="cat-name">캔</div>
+        <div class="cat-desc">알루미늄 캔, 철 캔류</div>
+      </div>
+      <div class="cat-card reveal" style="--delay: 0.16s">
+        <div class="cat-emoji">📄</div>
+        <div class="cat-name">종이</div>
+        <div class="cat-desc">신문지, 종이 박스류</div>
+      </div>
+      <div class="cat-card reveal" style="--delay: 0.24s">
+        <div class="cat-emoji">🍶</div>
+        <div class="cat-name">유리</div>
+        <div class="cat-desc">유리병, 유리 용기류</div>
+      </div>
+      <div class="cat-card reveal" style="--delay: 0.32s">
+        <div class="cat-emoji">📦</div>
+        <div class="cat-name">스티로폼</div>
+        <div class="cat-desc">스티로폼 박스, 완충재</div>
+      </div>
+      <div class="cat-card reveal" style="--delay: 0.4s">
+        <div class="cat-emoji">🛍️</div>
+        <div class="cat-name">비닐</div>
+        <div class="cat-desc">비닐봉지, 랩류</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 소개 섹션 -->
+  <section class="about-section" id="about">
+    <div class="about-inner reveal">
+      <div class="about-text">
+        <span class="section-tag">ABOUT</span>
+        <h2>이 프로젝트는?</h2>
+        <p>
+          상명대학교 박주형 외 연구팀이 ICROS 2023 학술대회에서 발표한
+          <strong>'딥러닝을 활용한 쓰레기 자동화 분류 시스템'</strong> 논문을
+          바탕으로 제작된 데모 프로젝트입니다.
+        </p>
+        <p>
+          Google Teachable Machine으로 학습시킨 모델을 활용하여
+          실시간 쓰레기 분류를 웹에서 구현했습니다.
+        </p>
+        <div class="about-tags">
+          <span class="tag">DeepLearning</span>
+          <span class="tag">Teachable Machine</span>
+          <span class="tag">Real-time</span>
+          <span class="tag">Recycling</span>
+        </div>
+      </div>
+      <div class="about-stats">
+        <div class="stat-card">
+          <div class="stat-num">40<span>만장</span></div>
+          <div class="stat-label">생활 폐기물 학습 데이터</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-num">6<span>종류</span></div>
+          <div class="stat-label">분류 가능한 쓰레기</div>
+        </div>
+        <div class="stat-card accent">
+          <div class="stat-num">62.5<span>%</span></div>
+          <div class="stat-label">현재 수작업 선별률 → AI로 개선</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 푸터 -->
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <div class="footer-logo">♻ TrashAI</div>
+      <p>동양미래대학교 로봇소프트웨어학과 · 김대양</p>
+      <p class="footer-ref">논문: 딥러닝을 활용한 쓰레기 자동화 분류 시스템 · ICROS 2023</p>
+    </div>
+  </footer>
+
+  <script src="js/particles.js"></script>
+  <script src="js/classifier.js"></script>
+  <script src="js/scroll.js"></script>
+</body>
+</html>
