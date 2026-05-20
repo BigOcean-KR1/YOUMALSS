@@ -144,7 +144,7 @@
 /* ===== CLASSIFIER ===== */
 (function(){
   const CFG={
-    MODEL_URL:null,
+    MODEL_URL:'https://teachablemachine.withgoogle.com/models/ChPvPgdOk/',
     CLASSES:[
       {name:'플라스틱',emoji:'🧴'},{name:'캔',emoji:'🥫'},
       {name:'종이',emoji:'📄'},{name:'유리',emoji:'🍶'},
