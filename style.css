@@ -649,3 +649,37 @@ body {
   font-family: var(--font);
   transition: opacity .3s ease;
 }
+
+/* ══ SLIDE 6 FINAL LAYOUT ══ */
+#s6 .s6-main {
+  grid-template-columns: 1.3fr 1fr !important;
+}
+#s6 .s6-subtitle-wrap {
+  margin-bottom: .4rem;
+}
+#s6 .sh-tag-s6 {
+  display: inline-block;
+  font-size: .75rem; font-weight: 700;
+  letter-spacing: .14em; text-transform: uppercase;
+  color: var(--green);
+  background: rgba(34,197,94,.1);
+  border: 1px solid rgba(34,197,94,.28);
+  padding: .22rem .8rem; border-radius: 5px;
+  margin-bottom: .5rem;
+}
+#s6-subtitle {
+  display: block;
+  font-size: clamp(1.6rem, 2.8vw, 2.2rem) !important;
+  font-weight: 900 !important;
+  color: var(--white) !important;
+  line-height: 1.2;
+}
+
+/* ── S6 IMAGE LEFT ── */
+.s6-img-first {
+  display: grid !important;
+  grid-template-columns: 1.3fr 1fr !important;
+}
+.s6-img-first .s6-img-wrap  { order: 1; }
+.s6-img-first .s6-steps     { order: 2; }
+.s6-img-first .s6-subtitle-wrap { order: 0; grid-column: 1 / -1; margin-bottom: .6rem; }
