@@ -1,55 +1,43 @@
-// ===== SLIDE NAVIGATION =====
 const TOTAL = 12;
-let current = 1;
+let cur = 1;
 
 function goTo(n, dir) {
   if (n < 1 || n > TOTAL) return;
-  const prev = document.getElementById(`slide-${current}`);
-  const next = document.getElementById(`slide-${n}`);
+  const prev = document.getElementById(`s${cur}`);
+  const next = document.getElementById(`s${n}`);
   prev.classList.remove('active');
-  prev.classList.add(dir === 1 ? 'exit-left' : 'exit-right');
-  setTimeout(() => prev.classList.remove('exit-left', 'exit-right'), 500);
+  prev.classList.add(dir > 0 ? 'exit-l' : 'exit-r');
+  setTimeout(() => prev.classList.remove('exit-l','exit-r'), 560);
   next.classList.add('active');
-  current = n;
+  cur = n;
   updateNav();
 }
-
-function nextSlide() { goTo(current + 1, 1); }
-function prevSlide() { goTo(current - 1, -1); }
+function next() { goTo(cur+1, 1); }
+function prev() { goTo(cur-1,-1); }
 
 function updateNav() {
-  document.getElementById('nav-count').textContent = `${current} / ${TOTAL}`;
-  document.querySelectorAll('.nav-dot').forEach((d, i) => {
-    d.classList.toggle('active', i + 1 === current);
-  });
+  document.querySelectorAll('.nb-dot').forEach((d,i) => d.classList.toggle('on', i+1===cur));
 }
 
 // Build dots
-const dotsEl = document.getElementById('nav-dots');
-for (let i = 1; i <= TOTAL; i++) {
+const dotsEl = document.getElementById('nb-dots');
+for (let i=1;i<=TOTAL;i++) {
   const d = document.createElement('div');
-  d.className = 'nav-dot' + (i === 1 ? ' active' : '');
-  d.onclick = () => goTo(i, i > current ? 1 : -1);
+  d.className = 'nb-dot'+(i===1?' on':'');
+  d.onclick = () => goTo(i, i>cur?1:-1);
   dotsEl.appendChild(d);
 }
-
-// Init first slide
-document.getElementById('slide-1').classList.add('active');
-updateNav();
+document.getElementById('s1').classList.add('active');
 
 // Keyboard
 document.addEventListener('keydown', e => {
-  if (e.key === 'ArrowRight' || e.key === 'ArrowDown') nextSlide();
-  if (e.key === 'ArrowLeft'  || e.key === 'ArrowUp')   prevSlide();
+  if (e.key==='ArrowRight'||e.key==='ArrowDown') next();
+  if (e.key==='ArrowLeft' ||e.key==='ArrowUp')   prev();
 });
 
 // Swipe
-let tsx = 0;
-document.addEventListener('touchstart', e => tsx = e.touches[0].clientX);
-document.addEventListener('touchend',   e => {
-  const dx = e.changedTouches[0].clientX - tsx;
-  if (Math.abs(dx) > 50) dx < 0 ? nextSlide() : prevSlide();
-});
+let tx=0;
+document.addEventListener('touchstart', e=>tx=e.touches[0].clientX);
+document.addEventListener('touchend',   e=>{ const dx=e.changedTouches[0].clientX-tx; if(Math.abs(dx)>50) dx<0?next():prev(); });
 
-window.nextSlide = nextSlide;
-window.prevSlide = prevSlide;
+window.next=next; window.prev=prev;

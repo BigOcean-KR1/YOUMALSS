@@ -1,57 +1,38 @@
-// ===== BACKGROUND PARTICLE SYSTEM =====
-(function () {
-  const canvas = document.getElementById('bg-canvas');
-  const ctx = canvas.getContext('2d');
-  let particles = [];
-  let W, H;
+(function(){
+  const c=document.getElementById('dots-canvas');
+  if(!c)return;
+  const ctx=c.getContext('2d');
+  let W,H,pts=[];
 
-  function resize() {
-    W = canvas.width  = window.innerWidth;
-    H = canvas.height = window.innerHeight;
+  function resize(){
+    W=c.width=window.innerWidth;
+    H=c.height=window.innerHeight;
   }
-  window.addEventListener('resize', resize);
-  resize();
+  resize(); window.addEventListener('resize',resize);
 
-  class Particle {
-    constructor() { this.reset(true); }
-    reset(init = false) {
-      this.x = Math.random() * W;
-      this.y = init ? Math.random() * H : H + 10;
-      this.size = Math.random() * 2 + 0.5;
-      this.speedY = -(Math.random() * 0.4 + 0.1);
-      this.speedX = (Math.random() - 0.5) * 0.2;
-      this.opacity = Math.random() * 0.4 + 0.05;
-      this.hue = 140 + Math.random() * 40; // green range
+  class P{
+    constructor(init){
+      this.x=Math.random()*W;
+      this.y=init?Math.random()*H:H+10;
+      this.r=Math.random()*1.5+.3;
+      this.vy=-(Math.random()*.3+.06);
+      this.vx=(Math.random()-.5)*.12;
+      this.a=Math.random()*.45+.04;
     }
-    update() {
-      this.x += this.speedX;
-      this.y += this.speedY;
-      if (this.y < -10) this.reset();
-    }
-    draw() {
+    tick(){ this.x+=this.vx; this.y+=this.vy; if(this.y<-8)Object.assign(this,new P(false)); }
+    draw(){
       ctx.beginPath();
-      ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
-      ctx.fillStyle = `hsla(${this.hue}, 60%, 65%, ${this.opacity})`;
+      ctx.arc(this.x,this.y,this.r,0,Math.PI*2);
+      ctx.fillStyle=`rgba(134,239,172,${this.a})`;
       ctx.fill();
     }
   }
 
-  // init
-  for (let i = 0; i < 80; i++) particles.push(new Particle());
+  for(let i=0;i<70;i++) pts.push(new P(true));
 
-  function loop() {
-    ctx.clearRect(0, 0, W, H);
-    // subtle grid lines
-    ctx.strokeStyle = 'rgba(116,198,157,0.03)';
-    ctx.lineWidth = 1;
-    const step = 80;
-    for (let x = 0; x < W; x += step) {
-      ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, H); ctx.stroke();
-    }
-    for (let y = 0; y < H; y += step) {
-      ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(W, y); ctx.stroke();
-    }
-    particles.forEach(p => { p.update(); p.draw(); });
+  function loop(){
+    ctx.clearRect(0,0,W,H);
+    pts.forEach(p=>{p.tick();p.draw();});
     requestAnimationFrame(loop);
   }
   loop();
