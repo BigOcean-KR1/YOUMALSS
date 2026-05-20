@@ -637,3 +637,15 @@ body {
 .s6-step-item.active .ssi-num { background: var(--green); }
 .ssi-label { font-size: 1rem; font-weight: 800; color: var(--white); }
 .ssi-desc  { font-size: .78rem; color: var(--muted); margin-top: .2rem; }
+
+/* ── S6 SUBTITLE ── */
+.s6-subtitle-wrap {
+  margin-bottom: .5rem;
+}
+#s6-subtitle {
+  font-size: 1.1rem;
+  font-weight: 800;
+  color: var(--green);
+  font-family: var(--font);
+  transition: opacity .3s ease;
+}
