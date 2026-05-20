@@ -38,10 +38,10 @@
     updateNav();
     if(n===5) setTimeout(runStatAnim, 350);
     if(n===6){
-      s6Step=-1; s6Active=true; s6SeenOverview=false;
+      s6Step=-1; s6Phase=0; s6Active=true;
       setTimeout(()=>{
         document.querySelectorAll('.s6-step-item').forEach((el,i)=>{
-          el.onclick=()=>s6GoTo(i);
+          el.onclick=()=>{ s6Phase=1; s6GoTo(i); };
         });
         s6GoTo(-1);
       }, 300);
@@ -98,15 +98,18 @@
 
   /* ── 슬라이드 6: 사진 줌인 + 단계 클릭/키보드 ── */
   const ZOOM = [
-    { ox:'50%', oy:'50%', scale:1   },  // 0: 전체샷
-    { ox:'92%', oy:'60%', scale:2.2 },  // 1: 쓰레기 투입
-    { ox:'78%', oy:'55%', scale:2.4 },  // 2: 적층 방지
-    { ox:'52%', oy:'8%',  scale:2.8 },  // 3: 카메라 인식
-    { ox:'20%', oy:'78%', scale:2.2 },  // 4: 자동 분류
-    { ox:'68%', oy:'80%', scale:2.6 },  // 5: 재순환
+    { ox:'50%', oy:'50%', scale:1   },  // 전체샷
+    { ox:'92%', oy:'60%', scale:2.2 },  // ① 쓰레기 투입
+    { ox:'78%', oy:'55%', scale:2.4 },  // ② 적층 방지
+    { ox:'52%', oy:'8%',  scale:2.8 },  // ③ 카메라 인식
+    { ox:'20%', oy:'78%', scale:2.2 },  // ④ 자동 분류
+    { ox:'68%', oy:'80%', scale:2.6 },  // ⑤ 재순환
   ];
-  // -1 = 전체샷, 0~4 = 단계
+  const S6_LABELS = ['전체 시스템 구조','① 쓰레기 투입','② 적층 방지','③ 카메라 인식','④ 자동 분류','⑤ 재순환'];
+
+  // phase: 0=첫전체샷 1=단계진행 2=두번째전체샷
   let s6Step = -1;
+  let s6Phase = 0;
   let s6Active = false;
 
   function s6GoTo(n){
@@ -115,37 +118,46 @@
     const img   = document.getElementById('s6-img');
     const title = document.getElementById('s6-subtitle');
     if(!img) return;
-
     items.forEach((el,i) => el.classList.toggle('active', i===n));
-
-    const z = ZOOM[n + 1]; // +1 because index 0 is overview
-    img.style.transition = 'transform .8s cubic-bezier(.4,0,.2,1), transform-origin .8s ease';
+    const z = n === -1 ? ZOOM[0] : ZOOM[n+1];
+    img.style.transition = 'transform .8s cubic-bezier(.4,0,.2,1)';
     img.style.transformOrigin = z.ox + ' ' + z.oy;
     img.style.transform = `scale(${z.scale})`;
-
-    // 소주제 텍스트
-    const labels = ['전체 시스템 구조', '① 쓰레기 투입', '② 적층 방지', '③ 카메라 인식', '④ 자동 분류', '⑤ 재순환'];
-    if(title) title.textContent = labels[n + 1];
+    if(title) title.textContent = n === -1 ? S6_LABELS[0] : S6_LABELS[n+1];
   }
 
-  let s6SeenOverview = false; // 전체샷 두번째 본 적 있는지
-
   function s6Next(){
-    if(s6Step < 4){
+    if(s6Phase === 0){
+      // 첫 전체샷 → ① 시작
+      s6Phase = 1;
+      s6GoTo(0);
+    } else if(s6Phase === 1 && s6Step < 4){
+      // 단계 진행
       s6GoTo(s6Step + 1);
-    } else if(s6Step === 4 && !s6SeenOverview){
-      // ⑤ 다음 → 전체샷 한번 더
-      s6SeenOverview = true;
+    } else if(s6Phase === 1 && s6Step === 4){
+      // ⑤ 끝 → 두번째 전체샷
+      s6Phase = 2;
       s6GoTo(-1);
-    } else {
-      // 전체샷 두번째 → 다음 슬라이드
-      s6SeenOverview = false;
+    } else if(s6Phase === 2){
+      // 두번째 전체샷 → 다음 슬라이드
       goTo(7, 1);
     }
   }
+
   function s6Prev(){
-    if(s6Step > -1) s6GoTo(s6Step - 1);
-    else goTo(5, -1);
+    if(s6Phase === 2){
+      // 두번째 전체샷에서 뒤로 → ⑤
+      s6Phase = 1;
+      s6GoTo(4);
+    } else if(s6Phase === 1 && s6Step > 0){
+      s6GoTo(s6Step - 1);
+    } else if(s6Phase === 1 && s6Step === 0){
+      // ① 에서 뒤로 → 첫 전체샷
+      s6Phase = 0;
+      s6GoTo(-1);
+    } else {
+      goTo(5, -1);
+    }
   }
 
   /* ── 슬라이드 6: 플로우 순차 등장 ── */
