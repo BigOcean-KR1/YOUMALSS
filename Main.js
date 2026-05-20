@@ -1,3 +1,85 @@
+(function(){
+  const c=document.getElementById('dots-canvas');
+  if(!c)return;
+  const ctx=c.getContext('2d');
+  let W,H,pts=[];
+
+  function resize(){
+    W=c.width=window.innerWidth;
+    H=c.height=window.innerHeight;
+  }
+  resize(); window.addEventListener('resize',resize);
+
+  class P{
+    constructor(init){
+      this.x=Math.random()*W;
+      this.y=init?Math.random()*H:H+10;
+      this.r=Math.random()*1.5+.3;
+      this.vy=-(Math.random()*.3+.06);
+      this.vx=(Math.random()-.5)*.12;
+      this.a=Math.random()*.45+.04;
+    }
+    tick(){ this.x+=this.vx; this.y+=this.vy; if(this.y<-8)Object.assign(this,new P(false)); }
+    draw(){
+      ctx.beginPath();
+      ctx.arc(this.x,this.y,this.r,0,Math.PI*2);
+      ctx.fillStyle=`rgba(134,239,172,${this.a})`;
+      ctx.fill();
+    }
+  }
+
+  for(let i=0;i<70;i++) pts.push(new P(true));
+
+  function loop(){
+    ctx.clearRect(0,0,W,H);
+    pts.forEach(p=>{p.tick();p.draw();});
+    requestAnimationFrame(loop);
+  }
+  loop();
+})();
+const TOTAL = 12;
+let cur = 1;
+
+function goTo(n, dir) {
+  if (n < 1 || n > TOTAL) return;
+  const prev = document.getElementById(`s${cur}`);
+  const next = document.getElementById(`s${n}`);
+  prev.classList.remove('active');
+  prev.classList.add(dir > 0 ? 'exit-l' : 'exit-r');
+  setTimeout(() => prev.classList.remove('exit-l','exit-r'), 560);
+  next.classList.add('active');
+  cur = n;
+  updateNav();
+}
+function next() { goTo(cur+1, 1); }
+function prev() { goTo(cur-1,-1); }
+
+function updateNav() {
+  document.querySelectorAll('.nb-dot').forEach((d,i) => d.classList.toggle('on', i+1===cur));
+}
+
+// Build dots
+const dotsEl = document.getElementById('nb-dots');
+for (let i=1;i<=TOTAL;i++) {
+  const d = document.createElement('div');
+  d.className = 'nb-dot'+(i===1?' on':'');
+  d.onclick = () => goTo(i, i>cur?1:-1);
+  dotsEl.appendChild(d);
+}
+document.getElementById('s1').classList.add('active');
+
+// Keyboard
+document.addEventListener('keydown', e => {
+  if (e.key==='ArrowRight'||e.key==='ArrowDown') next();
+  if (e.key==='ArrowLeft' ||e.key==='ArrowUp')   prev();
+});
+
+// Swipe
+let tx=0;
+document.addEventListener('touchstart', e=>tx=e.touches[0].clientX);
+document.addEventListener('touchend',   e=>{ const dx=e.changedTouches[0].clientX-tx; if(Math.abs(dx)>50) dx<0?next():prev(); });
+
+window.next=next; window.prev=prev;
 const CFG = {
   MODEL_URL: null,
   CLASSES: [
