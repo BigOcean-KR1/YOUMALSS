@@ -6,14 +6,14 @@
   --green-d:    #16a34a;
   --green-dim:  #15803d;
   --green-pale: #bbf7d0;
-  --bg:         #0a1f10;       /* ← 전체 통일 배경 */
-  --card:       #0f2914;       /* 카드 배경 */
-  --card2:      #122d17;
-  --border:     rgba(34,197,94,.18);
+  --bg:         #0d2412;       /* ← 전체 통일 배경 */
+  --card:       #1c3d22;       /* 카드 배경 */
+  --card2:      #1f4426;
+  --border:     rgba(34,197,94,.35);
   --white:      #ffffff;
-  --text:       rgba(255,255,255,.88);
-  --muted:      rgba(255,255,255,.45);
-  --muted2:     rgba(255,255,255,.25);
+  --text:       rgba(255,255,255,.95);
+  --muted:      rgba(255,255,255,.65);
+  --muted2:     rgba(255,255,255,.45);
   --font:       'Noto Sans KR', sans-serif;
   --r:          14px;
   --r-lg:       22px;
