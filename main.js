@@ -35,6 +35,40 @@
     cur=n;
     updateNav();
     if(n===5) setTimeout(runStatAnim, 350);
+    if(n===6) setTimeout(runFlowAnim, 200);
+    if(n===7) setTimeout(runGridAnim, 200);
+    if(n===6) setTimeout(runFlowAnim, 200);
+  }
+
+  function runFlowAnim(){
+    const steps = document.querySelectorAll('#s6 .flow-step');
+    const arrows = document.querySelectorAll('#s6 .flow-arr');
+    const note = document.querySelector('#s6 .flow-note');
+    // 초기화
+    steps.forEach(el=>{ el.style.opacity='0'; el.style.transform='translateY(24px)'; });
+    arrows.forEach(el=>{ el.style.opacity='0'; });
+    if(note){ note.style.opacity='0'; note.style.transform='translateY(12px)'; }
+    // 순서대로 등장
+    steps.forEach((el,i)=>{
+      setTimeout(()=>{
+        el.style.transition='opacity .45s ease, transform .45s ease';
+        el.style.opacity='1';
+        el.style.transform='translateY(0)';
+      }, i * 180);
+    });
+    arrows.forEach((el,i)=>{
+      setTimeout(()=>{
+        el.style.transition='opacity .3s ease';
+        el.style.opacity='1';
+      }, i * 180 + 120);
+    });
+    if(note){
+      setTimeout(()=>{
+        note.style.transition='opacity .45s ease, transform .45s ease';
+        note.style.opacity='1';
+        note.style.transform='translateY(0)';
+      }, 5 * 180 + 100);
+    }
   }
 
   function runStatAnim(){
@@ -79,6 +113,48 @@
   document.addEventListener('touchend',e=>{ const dx=e.changedTouches[0].clientX-tx; if(Math.abs(dx)>50) dx<0?next():prev(); });
   window.next=next; window.prev=prev;
 })();
+
+/* ===== FLOW ANIM ===== */
+  function runFlowAnim(){
+    const steps = document.querySelectorAll('#s6 .flow-step');
+    const arrows = document.querySelectorAll('#s6 .flow-arr');
+    const note   = document.querySelector('#s6 .flow-note');
+    // 초기화
+    steps.forEach(el=>{ el.style.opacity='0'; el.style.transform='translateY(24px)'; el.style.transition='none'; });
+    arrows.forEach(el=>{ el.style.opacity='0'; el.style.transition='none'; });
+    if(note){ note.style.opacity='0'; note.style.transition='none'; }
+    // 순서대로 등장
+    steps.forEach((el,i)=>{
+      setTimeout(()=>{
+        el.style.transition='opacity .4s ease, transform .4s ease';
+        el.style.opacity='1'; el.style.transform='translateY(0)';
+      }, i*150);
+    });
+    arrows.forEach((el,i)=>{
+      setTimeout(()=>{
+        el.style.transition='opacity .3s ease';
+        el.style.opacity='1';
+      }, i*150+100);
+    });
+    if(note){
+      setTimeout(()=>{
+        note.style.transition='opacity .4s ease';
+        note.style.opacity='1';
+      }, steps.length*150+100);
+    }
+  }
+
+/* ===== GRID ANIM ===== */
+  function runGridAnim(){
+    const cards = document.querySelectorAll('#s7 .sg-card');
+    cards.forEach(el=>{ el.style.opacity='0'; el.style.transform='translateY(24px) scale(.95)'; el.style.transition='none'; });
+    cards.forEach((el,i)=>{
+      setTimeout(()=>{
+        el.style.transition='opacity .4s ease, transform .4s ease';
+        el.style.opacity='1'; el.style.transform='translateY(0) scale(1)';
+      }, i*100);
+    });
+  }
 
 /* ===== CLASSIFIER ===== */
 (function(){
