@@ -130,7 +130,8 @@
 
   function s6Next(){
     if(s6Step < 4) s6GoTo(s6Step + 1);
-    else goTo(7, 1);
+    else if(s6Step === 4) s6GoTo(-1);  // ⑤ 다음 → 전체샷
+    else goTo(7, 1);                   // 전체샷 다음 → 다음 슬라이드
   }
   function s6Prev(){
     if(s6Step > -1) s6GoTo(s6Step - 1);
