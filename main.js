@@ -157,11 +157,11 @@
 
   function initBars(){
     const el=$('dr-bars'); if(!el)return; el.innerHTML='';
-    CFG.CLASSES.forEach(c=>{
+    CFG.CLASSES.forEach((c,i)=>{
       el.innerHTML+=`<div class="bar-item">
         <span class="bar-lbl">${c.emoji} ${c.name}</span>
-        <div class="bar-trk"><div class="bar-fill" id="bf-${c.name}" style="width:0%"></div></div>
-        <span class="bar-pct" id="bp-${c.name}">0%</span>
+        <div class="bar-trk"><div class="bar-fill" id="bf-${i}" style="width:0%"></div></div>
+        <span class="bar-pct" id="bp-${i}">0%</span>
       </div>`;
     });
   }
@@ -220,8 +220,8 @@
     em.textContent=best.emoji;
     $('dr-label').textContent=best.name;
     $('dr-conf').textContent=`신뢰도: ${(best.probability*100).toFixed(1)}%`;
-    ps.forEach(p=>{
-      const f=$(`bf-${p.name}`),c=$(`bp-${p.name}`);
+    ps.forEach((p,i)=>{
+      const f=$(`bf-${i}`),c=$(`bp-${i}`);
       if(f)f.style.width=(p.probability*100).toFixed(1)+'%';
       if(c)c.textContent=(p.probability*100).toFixed(0)+'%';
     });
@@ -230,8 +230,8 @@
   function reset(){
     $('dr-emoji').textContent='❓'; $('dr-label').textContent='대기 중';
     $('dr-conf').textContent='카메라를 시작하면 분류가 시작됩니다';
-    CFG.CLASSES.forEach(c=>{
-      const f=$(`bf-${c.name}`),p=$(`bp-${c.name}`);
+    CFG.CLASSES.forEach((c,i)=>{
+      const f=$(`bf-${i}`),p=$(`bp-${i}`);
       if(f)f.style.width='0%'; if(p)p.textContent='0%';
     });
   }
