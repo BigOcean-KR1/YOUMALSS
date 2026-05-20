@@ -115,12 +115,12 @@
   // 각 단계별 translate(x,y) + scale
   // 컨테이너 기준으로 이미지를 이동시켜서 pan+zoom 효과
   const CAM = [
-    { tx:  0,   ty:  0,   s: 1   },  // 전체샷
-    { tx:  38,  ty: 10,   s: 2.5 },  // ① 맨 오른쪽 프레임
-    { tx:  22,  ty:  0,   s: 2.5 },  // ② 파란 커튼
-    { tx:  5,   ty: -35,  s: 2.8 },  // ③ 상단 카메라
-    { tx: -28,  ty:  22,  s: 2.3 },  // ④ 왼쪽 컨베이어
-    { tx:  20,  ty:  22,  s: 2.8 },  // ⑤ 검은 박스
+    { ox: '50%', oy: '50%', s: 1   },  // 전체샷
+    { ox: '92%', oy: '60%', s: 2.2 },  // ① 쓰레기 투입
+    { ox: '78%', oy: '55%', s: 2.4 },  // ② 적층 방지
+    { ox: '52%', oy:  '8%', s: 2.6 },  // ③ 카메라 인식
+    { ox: '20%', oy: '78%', s: 2.2 },  // ④ 자동 분류
+    { ox: '68%', oy: '80%', s: 2.8 },  // ⑤ 재순환
   ];
 
   function s6GoTo(n){
@@ -135,10 +135,9 @@
     const idx = n === -1 ? 0 : n+1;
     const c = CAM[idx];
 
-    // 하나의 transform으로 pan+zoom 동시에 부드럽게
-    img.style.transition = 'transform .9s cubic-bezier(.25,.46,.45,.94)';
-    img.style.transformOrigin = 'center center';
-    img.style.transform = `scale(${c.s}) translate(${c.tx}%, ${c.ty}%)`;
+    img.style.transition = 'transform-origin 0s, transform .9s cubic-bezier(.25,.46,.45,.94)';
+    img.style.transformOrigin = c.ox + ' ' + c.oy;
+    img.style.transform = `scale(${c.s})`;
 
     if(title){
       title.style.opacity = '0';
