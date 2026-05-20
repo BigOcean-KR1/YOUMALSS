@@ -128,10 +128,20 @@
     if(title) title.textContent = labels[n + 1];
   }
 
+  let s6SeenOverview = false; // 전체샷 두번째 본 적 있는지
+
   function s6Next(){
-    if(s6Step < 4) s6GoTo(s6Step + 1);
-    else if(s6Step === 4) s6GoTo(-1);  // ⑤ 다음 → 전체샷
-    else goTo(7, 1);                   // 전체샷 다음 → 다음 슬라이드
+    if(s6Step < 4){
+      s6GoTo(s6Step + 1);
+    } else if(s6Step === 4 && !s6SeenOverview){
+      // ⑤ 다음 → 전체샷 한번 더
+      s6SeenOverview = true;
+      s6GoTo(-1);
+    } else {
+      // 전체샷 두번째 → 다음 슬라이드
+      s6SeenOverview = false;
+      goTo(7, 1);
+    }
   }
   function s6Prev(){
     if(s6Step > -1) s6GoTo(s6Step - 1);
