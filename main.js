@@ -148,12 +148,20 @@
 /* ===== GRID ANIM ===== */
   function runGridAnim(){
     const cards = document.querySelectorAll('#s7 .sg-card');
-    cards.forEach(el=>{ el.style.opacity='0'; el.style.transform='translateY(24px) scale(.95)'; el.style.transition='none'; });
+    cards.forEach(el=>{
+      el.style.opacity='0';
+      el.style.transform='translateY(24px) scale(.95)';
+      el.style.transition='none';
+      el.classList.remove('glow');
+    });
     cards.forEach((el,i)=>{
       setTimeout(()=>{
         el.style.transition='opacity .4s ease, transform .4s ease';
-        el.style.opacity='1'; el.style.transform='translateY(0) scale(1)';
-      }, i*100);
+        el.style.opacity='1';
+        el.style.transform='translateY(0) scale(1)';
+        // 등장 직후 글로우 켜기
+        setTimeout(()=> el.classList.add('glow'), 300);
+      }, i*120);
     });
   }
 
@@ -163,20 +171,26 @@
     const el23 = document.getElementById('num-23');
     if(!el40 || !el23) return;
 
-    function countUp(el, target, duration){
-      const start = performance.now();
-      function tick(now){
-        const p    = Math.min((now-start)/duration, 1);
-        const ease = 1 - Math.pow(1-p, 3);
-        el.textContent = Math.floor(target * ease);
-        if(p < 1) requestAnimationFrame(tick);
-        else el.textContent = target;
-      }
-      requestAnimationFrame(tick);
+    // 초기화
+    el40.textContent = '0';
+    el23.textContent = '0';
+
+    function countUp(el, target, duration, delay){
+      setTimeout(()=>{
+        const start = performance.now();
+        function tick(now){
+          const p    = Math.min((now-start)/duration, 1);
+          const ease = 1 - Math.pow(1-p, 3);
+          el.textContent = Math.floor(target * ease);
+          if(p < 1) requestAnimationFrame(tick);
+          else el.textContent = target;
+        }
+        requestAnimationFrame(tick);
+      }, delay);
     }
 
-    countUp(el40, 40, 1600);
-    setTimeout(()=> countUp(el23, 23, 1600), 150);
+    countUp(el40, 40, 1600, 0);
+    countUp(el23, 23, 1600, 250);
   }
 
 /* ===== CLASSIFIER ===== */
