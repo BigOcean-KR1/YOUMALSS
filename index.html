@@ -229,10 +229,10 @@
       </header>
       <div class="six-grid">
         <div class="sg-card sg1"><span class="sg-em">🧴</span><span class="sg-name">플라스틱</span><span class="sg-desc">PET병, 플라스틱 용기</span></div>
-        <div class="sg-card sg2"><span class="sg-em">🥫</span><span class="sg-name">캔</span><span class="sg-desc">알루미늄 캔, 철 캔</span></div>
+        <div class="sg-card sg2"><span class="sg-em">🥫</span><span class="sg-name">Metal</span><span class="sg-desc">알루미늄 캔, 철 캔</span></div>
         <div class="sg-card sg3"><span class="sg-em">📄</span><span class="sg-name">종이</span><span class="sg-desc">신문지, 종이 박스</span></div>
         <div class="sg-card sg4"><span class="sg-em">🍶</span><span class="sg-name">유리</span><span class="sg-desc">유리병, 유리 용기</span></div>
-        <div class="sg-card sg5"><span class="sg-em">📦</span><span class="sg-name">스티로폼</span><span class="sg-desc">스티로폼 박스, 완충재</span></div>
+        <div class="sg-card sg5"><span class="sg-em">🗑️</span><span class="sg-name">Trash</span><span class="sg-desc">기타 쓰레기</span></div>
         <div class="sg-card sg6"><span class="sg-em">🛍️</span><span class="sg-name">비닐</span><span class="sg-desc">비닐봉지, 랩류</span></div>
       </div>
       <p class="sg-note">※ 분류 실패 시 순환 구조로 재분류 시도</p>
@@ -355,6 +355,9 @@
           <div class="cam-btns">
             <button class="cbtn-start" id="btn-start" onclick="startCamera()">
               <span class="cbs-dot"></span> 카메라 시작
+            </button>
+            <button class="cbtn-capture" id="btn-capture" onclick="captureFrame()" style="display:none">
+              📸 캡처 분류
             </button>
             <button class="cbtn-stop" id="btn-stop" onclick="stopCamera()" style="display:none">
               ⏹ 정지
