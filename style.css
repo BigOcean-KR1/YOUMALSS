@@ -516,3 +516,27 @@ body {
 }
 .s6-right { display: flex; flex-direction: column; gap: .8rem; }
 #s6 .flow { margin-bottom: 0; }
+
+/* ── SLIDE 6 BIGGER ── */
+#s6 .fs-label { font-size: .95rem; }
+#s6 .fs-desc  { font-size: .82rem; }
+#s6 .fs-num   { width:38px; height:38px; font-size:1rem; }
+#s6 .flow-step { padding: 1.4rem 1rem; }
+#s6 .flow-arr  { font-size: 1.6rem; }
+#s6 .flow-note { font-size: .92rem; padding: .9rem 1.4rem; }
+.system-img    { max-height: 320px; }
+
+/* ── SLIDE 7 BIGGER ── */
+#s7 .six-grid  { gap: 1.3rem; }
+#s7 .sg-card   { padding: 1.9rem .8rem 1.6rem; }
+#s7 .sg-em     { font-size: 2.6rem; }
+#s7 .sg-name   { font-size: 1rem; }
+#s7 .sg-desc   { font-size: .78rem; }
+#s7 .sg-note   { font-size: .88rem; margin-top: .5rem; }
+
+/* ── SLIDE 9 BIGGER ── */
+#s9 .effects-grid { gap: 1.3rem; }
+#s9 .ef-card  { padding: 1.8rem 1.3rem; }
+#s9 .ef-em    { font-size: 2.4rem; }
+#s9 .ef-name  { font-size: 1.1rem; }
+#s9 .ef-body  { font-size: .9rem; }
