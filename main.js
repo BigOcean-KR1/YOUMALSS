@@ -334,23 +334,42 @@
   async function captureFrame(){
     const btn = document.getElementById('btn-capture');
     if(!frozen){
-      // 일시정지 + 즉시 예측
       frozen = true;
       clearInterval(intv);
-      await predict();
+      // running 무시하고 강제 예측
+      await predictForce();
       btn.textContent = '▶ 재개';
       btn.classList.add('frozen');
-      // 캠 화면에 캡처 표시
-      const scan = document.getElementById('cf-scan');
-      scan.classList.remove('on');
+      document.getElementById('cf-scan').classList.remove('on');
     } else {
-      // 재개
       frozen = false;
       intv = setInterval(predict, CFG.MS);
       btn.textContent = '📸 캡처 분류';
       btn.classList.remove('frozen');
       document.getElementById('cf-scan').classList.add('on');
     }
+  }
+
+  async function predictForce(){
+    const vid = $('webcam');
+    let ps;
+    if(model){
+      const r = await model.predict(vid);
+      ps = r.map((p,i)=>({name:p.className, probability:p.probability, emoji:CFG.CLASSES[i]?.emoji||'❓'}));
+    } else {
+      const w = Math.floor(Math.random() * CFG.CLASSES.length);
+      ps = CFG.CLASSES.map((c,i)=>({name:c.name, emoji:c.emoji, probability:i===w?0.7+Math.random()*.25:0.04+Math.random()*.08}));
+    }
+    const best = ps.reduce((a,b)=>a.probability>b.probability?a:b);
+    const em = $('dr-emoji'); em.classList.remove('pop'); void em.offsetWidth; em.classList.add('pop');
+    em.textContent = best.emoji;
+    $('dr-label').textContent = best.name;
+    $('dr-conf').textContent = `신뢰도: ${(best.probability*100).toFixed(1)}%`;
+    ps.forEach((p,i)=>{
+      const f=$(`bf-${i}`), c=$(`bp-${i}`);
+      if(f) f.style.width=(p.probability*100).toFixed(1)+'%';
+      if(c) c.textContent=(p.probability*100).toFixed(0)+'%';
+    });
   }
 
   async function startCamera(){
