@@ -38,13 +38,12 @@
     updateNav();
     if(n===5) setTimeout(runStatAnim, 350);
     if(n===6){
-      s6Step=0; s6Active=true;
+      s6Step=-1; s6Active=true;
       setTimeout(()=>{
-        // 클릭 이벤트
         document.querySelectorAll('.s6-step-item').forEach((el,i)=>{
           el.onclick=()=>s6GoTo(i);
         });
-        s6GoTo(0);
+        s6GoTo(-1); // 전체샷부터 시작
       }, 300);
     }
     if(n!==6) s6Active=false;
@@ -99,30 +98,44 @@
 
   /* ── 슬라이드 6: 사진 줌인 + 단계 클릭/키보드 ── */
   const ZOOM = [
-    { ox:'92%', oy:'60%', scale:2.2 },
-    { ox:'78%', oy:'55%', scale:2.4 },
-    { ox:'52%', oy:'8%',  scale:2.8 },
-    { ox:'20%', oy:'78%', scale:2.2 },
-    { ox:'68%', oy:'80%', scale:2.6 },
+    { ox:'50%', oy:'50%', scale:1   },  // 0: 전체샷
+    { ox:'92%', oy:'60%', scale:2.2 },  // 1: 쓰레기 투입
+    { ox:'78%', oy:'55%', scale:2.4 },  // 2: 적층 방지
+    { ox:'52%', oy:'8%',  scale:2.8 },  // 3: 카메라 인식
+    { ox:'20%', oy:'78%', scale:2.2 },  // 4: 자동 분류
+    { ox:'68%', oy:'80%', scale:2.6 },  // 5: 재순환
   ];
-  let s6Step = 0;
+  // -1 = 전체샷, 0~4 = 단계
+  let s6Step = -1;
   let s6Active = false;
 
   function s6GoTo(n){
-    if(n < 0) n = 0;
-    if(n > 4) n = 4;
     s6Step = n;
     const items = document.querySelectorAll('.s6-step-item');
     const img   = document.getElementById('s6-img');
-    if(!items.length || !img) return;
+    const title = document.getElementById('s6-subtitle');
+    if(!img) return;
+
     items.forEach((el,i) => el.classList.toggle('active', i===n));
-    const z = ZOOM[n];
+
+    const z = ZOOM[n + 1]; // +1 because index 0 is overview
+    img.style.transition = 'transform .8s cubic-bezier(.4,0,.2,1), transform-origin .8s ease';
     img.style.transformOrigin = z.ox + ' ' + z.oy;
     img.style.transform = `scale(${z.scale})`;
+
+    // 소주제 텍스트
+    const labels = ['전체 시스템 구조', '① 쓰레기 투입', '② 적층 방지', '③ 카메라 인식', '④ 자동 분류', '⑤ 재순환'];
+    if(title) title.textContent = labels[n + 1];
   }
 
-  function s6Next(){ if(s6Step < 4) s6GoTo(s6Step+1); else goTo(7, 1); }
-  function s6Prev(){ if(s6Step > 0) s6GoTo(s6Step-1); else goTo(5,-1); }
+  function s6Next(){
+    if(s6Step < 4) s6GoTo(s6Step + 1);
+    else goTo(7, 1);
+  }
+  function s6Prev(){
+    if(s6Step > -1) s6GoTo(s6Step - 1);
+    else goTo(5, -1);
+  }
 
   /* ── 슬라이드 6: 플로우 순차 등장 ── */
   // 각 단계별 사진 줌 위치 (originX%, originY%, scale)
