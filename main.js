@@ -120,10 +120,25 @@
     if(!img) return;
     items.forEach((el,i) => el.classList.toggle('active', i===n));
     const z = n === -1 ? ZOOM[0] : ZOOM[n+1];
-    img.style.transition = 'transform .8s cubic-bezier(.4,0,.2,1)';
-    img.style.transformOrigin = z.ox + ' ' + z.oy;
-    img.style.transform = `scale(${z.scale})`;
-    if(title) title.textContent = n === -1 ? S6_LABELS[0] : S6_LABELS[n+1];
+
+    // 1단계: 현재 위치에서 scale(1)로 줄이기
+    img.style.transition = 'transform .35s cubic-bezier(.4,0,.2,1)';
+    img.style.transform = 'scale(1)';
+
+    // 2단계: origin 바꾸고 목표 scale로 확대
+    setTimeout(()=>{
+      img.style.transformOrigin = z.ox + ' ' + z.oy;
+      img.style.transition = 'transform .55s cubic-bezier(.22,1,.36,1)';
+      img.style.transform = `scale(${z.scale})`;
+    }, 360);
+
+    if(title){
+      title.style.opacity = '0';
+      setTimeout(()=>{
+        title.textContent = n === -1 ? S6_LABELS[0] : S6_LABELS[n+1];
+        title.style.opacity = '1';
+      }, 200);
+    }
   }
 
   function s6Next(){
