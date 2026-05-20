@@ -364,7 +364,7 @@ body {
 .dr-conf{font-size:.85rem;color:var(--muted);text-align:center;}
 .dr-bars{display:flex;flex-direction:column;gap:.45rem;}
 .bar-item{display:flex;align-items:center;gap:.6rem;font-size:.76rem;}
-.bar-lbl{width:56px;color:var(--muted);text-align:right;flex-shrink:0;}
+.bar-lbl{width:72px;color:var(--muted);text-align:right;flex-shrink:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-size:.72rem;}
 .bar-trk{flex:1;height:6px;background:rgba(255,255,255,.06);border-radius:3px;overflow:hidden;}
 .bar-fill{height:100%;background:linear-gradient(90deg,var(--green-dim),var(--green));border-radius:3px;transition:width .4s;}
 .bar-pct{width:32px;color:var(--muted2);font-size:.72rem;}
