@@ -398,3 +398,16 @@ body {
 .nb-dot{width:7px;height:7px;border-radius:50%;background:rgba(34,197,94,.22);cursor:pointer;transition:all .2s;}
 .nb-dot.on{background:var(--green);transform:scale(1.45);}
 .key-tip{position:fixed;bottom:5rem;left:50%;transform:translateX(-50%);font-size:.72rem;color:rgba(255,255,255,.14);pointer-events:none;letter-spacing:.08em;}
+.bsb-source { font-size:.72rem; color:var(--muted2); margin-top:.8rem; font-style:italic; }
+
+/* END POINTS */
+.end-points { display:flex; flex-direction:column; gap:1.2rem; margin-top:2rem; }
+.ep-item {
+  font-size:1.5rem; font-weight:700; color:var(--white);
+  padding:1.1rem 1.6rem;
+  background:rgba(34,197,94,.08);
+  border:1px solid rgba(34,197,94,.2);
+  border-radius:var(--r-lg);
+  display:flex; align-items:center;
+}
+.ep-item strong { color:var(--green); }
