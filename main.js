@@ -20,10 +20,12 @@
   loop();
 })();
 
-/* ===== SLIDES ===== */
+/* ===== SLIDES + ANIMATIONS ===== */
 (function(){
   const TOTAL=12;
   let cur=1;
+
+  /* ── 슬라이드 이동 ── */
   function goTo(n,dir){
     if(n<1||n>TOTAL)return;
     const prev=document.getElementById(`s${cur}`);
@@ -38,57 +40,6 @@
     if(n===6) setTimeout(runFlowAnim, 200);
     if(n===7) setTimeout(runGridAnim, 200);
     if(n===8) setTimeout(runDataAnim, 350);
-    if(n===6) setTimeout(runFlowAnim, 200);
-  }
-
-  function runFlowAnim(){
-    const steps = document.querySelectorAll('#s6 .flow-step');
-    const arrows = document.querySelectorAll('#s6 .flow-arr');
-    const note = document.querySelector('#s6 .flow-note');
-    // 초기화
-    steps.forEach(el=>{ el.style.opacity='0'; el.style.transform='translateY(24px)'; });
-    arrows.forEach(el=>{ el.style.opacity='0'; });
-    if(note){ note.style.opacity='0'; note.style.transform='translateY(12px)'; }
-    // 순서대로 등장
-    steps.forEach((el,i)=>{
-      setTimeout(()=>{
-        el.style.transition='opacity .45s ease, transform .45s ease';
-        el.style.opacity='1';
-        el.style.transform='translateY(0)';
-      }, i * 180);
-    });
-    arrows.forEach((el,i)=>{
-      setTimeout(()=>{
-        el.style.transition='opacity .3s ease';
-        el.style.opacity='1';
-      }, i * 180 + 120);
-    });
-    if(note){
-      setTimeout(()=>{
-        note.style.transition='opacity .45s ease, transform .45s ease';
-        note.style.opacity='1';
-        note.style.transform='translateY(0)';
-      }, 5 * 180 + 100);
-    }
-  }
-
-  function runStatAnim(){
-    const numEl  = document.getElementById('stat-num');
-    const fillEl = document.getElementById('stat-bar');
-    if(!numEl || !fillEl) return;
-    const target=62.5, duration=1800, start=performance.now();
-    fillEl.style.transition='none';
-    fillEl.style.width='0%';
-    function tick(now){
-      const p=Math.min((now-start)/duration,1);
-      const ease=1-Math.pow(1-p,3);
-      const val=(target*ease);
-      numEl.textContent=val.toFixed(1);
-      fillEl.style.width=val+'%';
-      if(p<1) requestAnimationFrame(tick);
-      else{ numEl.textContent='62.5'; fillEl.style.width='62.5%'; }
-    }
-    requestAnimationFrame(tick);
   }
   function next(){ goTo(cur+1,1); }
   function prev(){ goTo(cur-1,-1); }
@@ -103,8 +54,6 @@
     dotsEl.appendChild(d);
   }
   document.getElementById('s1').classList.add('active');
-  // 직접 5번으로 이동했을 때도 실행
-  if(cur===5) setTimeout(runStatAnim, 350);
   document.addEventListener('keydown',e=>{
     if(e.key==='ArrowRight'||e.key==='ArrowDown') next();
     if(e.key==='ArrowLeft' ||e.key==='ArrowUp')   prev();
@@ -113,18 +62,35 @@
   document.addEventListener('touchstart',e=>tx=e.touches[0].clientX);
   document.addEventListener('touchend',e=>{ const dx=e.changedTouches[0].clientX-tx; if(Math.abs(dx)>50) dx<0?next():prev(); });
   window.next=next; window.prev=prev;
-})();
 
-/* ===== FLOW ANIM ===== */
+  /* ── 슬라이드 5: 선별률 카운트업 ── */
+  function runStatAnim(){
+    const numEl=document.getElementById('stat-num');
+    const fillEl=document.getElementById('stat-bar');
+    if(!numEl||!fillEl)return;
+    fillEl.style.transition='none'; fillEl.style.width='0%';
+    numEl.textContent='0';
+    const target=62.5, duration=1800, start=performance.now();
+    function tick(now){
+      const p=Math.min((now-start)/duration,1);
+      const ease=1-Math.pow(1-p,3);
+      const val=target*ease;
+      numEl.textContent=val.toFixed(1);
+      fillEl.style.width=val+'%';
+      if(p<1) requestAnimationFrame(tick);
+      else{ numEl.textContent='62.5'; fillEl.style.width='62.5%'; }
+    }
+    requestAnimationFrame(tick);
+  }
+
+  /* ── 슬라이드 6: 플로우 순차 등장 ── */
   function runFlowAnim(){
-    const steps = document.querySelectorAll('#s6 .flow-step');
-    const arrows = document.querySelectorAll('#s6 .flow-arr');
-    const note   = document.querySelector('#s6 .flow-note');
-    // 초기화
+    const steps=document.querySelectorAll('#s6 .flow-step');
+    const arrows=document.querySelectorAll('#s6 .flow-arr');
+    const note=document.querySelector('#s6 .flow-note');
     steps.forEach(el=>{ el.style.opacity='0'; el.style.transform='translateY(24px)'; el.style.transition='none'; });
     arrows.forEach(el=>{ el.style.opacity='0'; el.style.transition='none'; });
     if(note){ note.style.opacity='0'; note.style.transition='none'; }
-    // 순서대로 등장
     steps.forEach((el,i)=>{
       setTimeout(()=>{
         el.style.transition='opacity .4s ease, transform .4s ease';
@@ -132,66 +98,48 @@
       }, i*150);
     });
     arrows.forEach((el,i)=>{
-      setTimeout(()=>{
-        el.style.transition='opacity .3s ease';
-        el.style.opacity='1';
-      }, i*150+100);
+      setTimeout(()=>{ el.style.transition='opacity .3s ease'; el.style.opacity='1'; }, i*150+100);
     });
-    if(note){
-      setTimeout(()=>{
-        note.style.transition='opacity .4s ease';
-        note.style.opacity='1';
-      }, steps.length*150+100);
-    }
+    if(note){ setTimeout(()=>{ note.style.transition='opacity .4s ease'; note.style.opacity='1'; }, steps.length*150+100); }
   }
 
-/* ===== GRID ANIM ===== */
+  /* ── 슬라이드 7: 카드 순차 등장 + 글로우 ── */
   function runGridAnim(){
-    const cards = document.querySelectorAll('#s7 .sg-card');
-    cards.forEach(el=>{
-      el.style.opacity='0';
-      el.style.transform='translateY(24px) scale(.95)';
-      el.style.transition='none';
-      el.classList.remove('glow');
-    });
+    const cards=document.querySelectorAll('#s7 .sg-card');
+    cards.forEach(el=>{ el.style.opacity='0'; el.style.transform='translateY(24px) scale(.95)'; el.style.transition='none'; el.classList.remove('glow'); });
     cards.forEach((el,i)=>{
       setTimeout(()=>{
         el.style.transition='opacity .4s ease, transform .4s ease';
-        el.style.opacity='1';
-        el.style.transform='translateY(0) scale(1)';
-        // 등장 직후 글로우 켜기
-        setTimeout(()=> el.classList.add('glow'), 300);
+        el.style.opacity='1'; el.style.transform='translateY(0) scale(1)';
+        setTimeout(()=>el.classList.add('glow'), 300);
       }, i*120);
     });
   }
 
-/* ===== DATA ANIM ===== */
+  /* ── 슬라이드 8: 숫자 카운트업 ── */
   function runDataAnim(){
-    const el40 = document.getElementById('num-40');
-    const el23 = document.getElementById('num-23');
-    if(!el40 || !el23) return;
-
-    // 초기화
-    el40.textContent = '0';
-    el23.textContent = '0';
-
-    function countUp(el, target, duration, delay){
+    const el40=document.getElementById('num-40');
+    const el23=document.getElementById('num-23');
+    if(!el40||!el23)return;
+    el40.textContent='0'; el23.textContent='0';
+    function countUp(el,target,duration,delay){
       setTimeout(()=>{
-        const start = performance.now();
+        const start=performance.now();
         function tick(now){
-          const p    = Math.min((now-start)/duration, 1);
-          const ease = 1 - Math.pow(1-p, 3);
-          el.textContent = Math.floor(target * ease);
-          if(p < 1) requestAnimationFrame(tick);
-          else el.textContent = target;
+          const p=Math.min((now-start)/duration,1);
+          const ease=1-Math.pow(1-p,3);
+          el.textContent=Math.floor(target*ease);
+          if(p<1) requestAnimationFrame(tick);
+          else el.textContent=target;
         }
         requestAnimationFrame(tick);
       }, delay);
     }
-
-    countUp(el40, 40, 1600, 0);
-    countUp(el23, 23, 1600, 250);
+    countUp(el40,40,1600,0);
+    countUp(el23,23,1600,250);
   }
+
+})();
 
 /* ===== CLASSIFIER ===== */
 (function(){
@@ -288,6 +236,5 @@
     });
   }
   function setStatus(t,msg){ $('dm-text').textContent=msg; $('dm-dot').className='dm-dot'+(t==='ok'?' ok':''); }
-
   window.startCamera=startCamera; window.stopCamera=stopCamera;
 })();
