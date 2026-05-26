@@ -688,8 +688,8 @@ body {
 #s6 { overflow: hidden; }
 #s6 .slide-inner { padding-bottom: 0; }
 #s6 .s6-main {
-  max-height: 78vh !important;
-  height: 78vh !important;
+  max-height: 82vh !important;
+  height: 82vh !important;
 }
 #s6 .s6-img-wrap { 
   height: 100%;
@@ -700,8 +700,11 @@ body {
   overflow-y: auto;
   overflow-x: hidden;
   scrollbar-width: none;
+  justify-content: space-evenly;
 }
 #s6 .s6-steps::-webkit-scrollbar { display: none; }
+#s6 .s6-step-item { padding: .7rem 1.1rem; }
+.ssi-num { width: 34px; height: 34px; font-size: .85rem; }
 
 /* ── S6 SUBTITLE FADE ── */
 #s6-subtitle {
