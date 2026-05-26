@@ -707,3 +707,13 @@ body {
 #s6-subtitle {
   transition: opacity .2s ease;
 }
+
+/* ── IMPL-GRAPH FIT IMAGE ── */
+.impl-graph {
+  aspect-ratio: unset !important;
+  height: auto !important;
+  background: transparent !important;
+  border: none !important;
+  display: block !important;
+  padding: 0 !important;
+}
