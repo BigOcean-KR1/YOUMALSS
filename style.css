@@ -402,7 +402,7 @@ body {
 .bsb-source { font-size:.72rem; color:var(--muted2); margin-top:.8rem; font-style:italic; }
 
 /* END POINTS */
-.end-points { display:flex; flex-direction:column; gap:1.2rem; margin-top:2rem; }
+.end-points { display:flex; flex-direction:column; gap:2rem; margin-top:2rem; }
 .ep-item {
   font-size:1.5rem; font-weight:700; color:var(--white);
   padding:1.1rem 1.6rem;
@@ -411,7 +411,7 @@ body {
   border-radius:var(--r-lg);
   display:flex; align-items:center;
 }
-.ep-item strong { color:var(--green); }
+.ep-item strong { color:var(--green); margin: 0 .25rem; }
 
 /* ── FLOW + GRID 초기 숨김 (JS로 순차 등장) ── */
 
