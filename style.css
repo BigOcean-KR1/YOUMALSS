@@ -590,6 +590,7 @@ body {
   height: 100%;
   background: rgba(0,0,0,.3);
   display: flex; align-items: center; justify-content: center;
+  position: relative;
 }
 .system-img-top {
   width: 100% !important;
