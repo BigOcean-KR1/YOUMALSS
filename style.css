@@ -685,26 +685,40 @@ body {
 .s6-img-first .s6-subtitle-wrap { order: 0; grid-column: 1 / -1; margin-bottom: .6rem; }
 
 /* ── S6 OVERFLOW FIX ── */
-#s6 { overflow: hidden; }
-#s6 .slide-inner { padding-bottom: 0; }
-#s6 .s6-main {
-  max-height: 82vh !important;
-  height: 82vh !important;
+#s6 { overflow: hidden; align-items: stretch; }
+#s6 .slide-inner {
+  width: min(96vw, 1100px);
+  margin: 0 auto;
+  padding-top: .8rem !important;
+  padding-bottom: 3rem !important;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  box-sizing: border-box;
 }
-#s6 .s6-img-wrap { 
+#s6 .s6-main {
+  flex: 1;
+  min-height: 0;
+  max-height: none !important;
+  height: auto !important;
+}
+#s6 .s6-img-wrap {
   height: 100%;
   min-height: 0;
 }
 #s6 .s6-steps {
   height: 100%;
+  min-height: 0;
   overflow-y: auto;
   overflow-x: hidden;
   scrollbar-width: none;
   justify-content: space-evenly;
 }
 #s6 .s6-steps::-webkit-scrollbar { display: none; }
-#s6 .s6-step-item { padding: .7rem 1.1rem; }
-.ssi-num { width: 34px; height: 34px; font-size: .85rem; }
+#s6 .s6-step-item { padding: .6rem 1rem; }
+#s6 .ssi-num { width: 32px; height: 32px; font-size: .8rem; }
+#s6 .ssi-label { font-size: .9rem; }
+#s6 .ssi-desc  { font-size: .72rem; }
 
 /* ── S6 SUBTITLE FADE ── */
 #s6-subtitle {
