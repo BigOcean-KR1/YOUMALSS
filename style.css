@@ -690,7 +690,7 @@ body {
   width: min(96vw, 1100px);
   margin: 0 auto;
   padding-top: .8rem !important;
-  padding-bottom: 3rem !important;
+  padding-bottom: 5rem !important;
   display: flex;
   flex-direction: column;
   height: 100%;
